@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PostController::class, 'index'])->middleware(['cors'])->name('post.index');
+// Route::middleware(['cors'])
+Route::post('/{id}', [PostController::class, 'store'])->name('post.store');
+Route::post('/{id}', [PostController::class, 'edit'])->name('post.edit');
+Route::get('/{id}', [PostController::class, 'show'])->name('post.show');
+Route::delete('/{id}', [PostController::class, 'delete'])->name('post.delete');

@@ -4,27 +4,51 @@ import {   Modal,
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton,Button, useDisclosure, Image, Box,Text, Center, HStack, VStack } from '@chakra-ui/react';
+    ModalCloseButton,Button,TabPanel,SimpleGrid, useDisclosure, Image, Box,Text, Center, HStack, VStack } from '@chakra-ui/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Pagination from './Pagination';
 
 const Post = () => {
 
-    function VerticallyCenter() {
-        const { isOpen, onOpen, onClose } = useDisclosure()
-      
+    const [posts,setPosts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage, setPostsPerPage] = useState(10);  
+
+    const getData = async () => {
+        const res = await axios.get('http://localhost:8000/');
+        //res = await fetch('http://localhost:8000/');
+        setPosts(res.data);
+    }
+
+    useEffect(()=>{
+        return () => {
+            getData();
+        };
+    }, []);
+
+    const indexOfLast = currentPage * postsPerPage;
+    const indexOfFirst = indexOfLast - postsPerPage;
+    const currentPosts = posts.slice(indexOfFirst, indexOfLast);
+
+    function VerticallyCenter(posts) {
+        const { isOpen, onOpen, onClose } = useDisclosure();
+        console.log('posts' + posts);
+        posts.map((item)=>{
         return (
           <>
-            <br/>
-            <br/>
-            <Box boxSize='220px' bg={'red.500'} borderWidth="1px" cursor="pointer">
-            <VStack h={200} justify='center' bg='orange' onClick={onOpen} hover>
-            <Image boxSize='150px' src='https://bit.ly/dan-abramov' alt='Dan Abramov' />
-            <Text fontSize='2xl'>하이 ㅋㅋ</Text>
-            {/* <Button onClick={onOpen}>Trigger modal</Button> */}
+            <Box height='80px' maxW='250px' boxSize='250px' bg={'red.500'} borderWidth="2px" borderRadius='lg' cursor="pointer">
+                <VStack h={200} justify='center' bg='orange' onClick={onOpen} hover="true">
+                    <Image boxSize='150px' src='https://bit.ly/dan-abramov' alt='Dan Abramov' />
+                    <Text fontSize='2xl'>{item.posts.title}</Text>
+                    <Button onClick={()=>{console.log(item)}}>Trigger modal</Button>
+                </VStack>
+            </Box>
 
             <Modal onClose={onClose} isOpen={isOpen} isCentered>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
+                <ModalHeader>{item.posts.title}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   asdjajaiwodqajoiwdadhoiasiodsahoi
@@ -34,18 +58,24 @@ const Post = () => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            </VStack>
-            </Box>
           </>
         )
+        })
       }
 
     return(
         <div className='post'>
-            <Box boxSize='220px' bg={'blue.500'}>
-                    <VerticallyCenter></VerticallyCenter>
-                    
-            </Box>
+
+            <SimpleGrid minChildWidth='250px' spacing='50px'>
+            {
+                <VerticallyCenter posts={currentPosts}></VerticallyCenter>
+            }
+            </SimpleGrid>
+            <Pagination 
+                postsPerPage={postsPerPage}
+                totalPosts={posts.length}
+                paginate={setCurrentPage}>
+            </Pagination>
         </div>
     )
 }

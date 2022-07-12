@@ -2,16 +2,18 @@ import { Divider, Image, Center,Button,VStack,Stack,StackDivider,GridItem,Grid,I
 import Header from './Header';
 import { HamburgerIcon } from '@chakra-ui/icons'
 import Post from './Post';
+import { useEffect } from 'react';
 
 
 const Sidebar = () => {
+
     return(
         <div>
             <Grid
   templateAreas={`"header header"
                   "nav main"
                   "nav footer"`}
-  gridTemplateRows={'130px 1fr 300px'}
+  gridTemplateRows={'130px 1100px 30px'}
   gridTemplateColumns={'150px 1fr'}
   h='200px'
   gap='1'
@@ -44,7 +46,7 @@ const Sidebar = () => {
                         </Button>
                     </VStack>
   </GridItem>
-  <GridItem  pl='2' bg='green.300' area={'main'} h='700px'>
+  <GridItem  pl='2' bg='green.300' area={'main'} h='1100px'>
 	<Post/>
   </GridItem>
   <GridItem pl='2' bg='blue.300' area={'footer'}>
