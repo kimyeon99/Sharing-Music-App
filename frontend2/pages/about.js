@@ -1,5 +1,12 @@
-import NavBar from "../components/navbar";
+import NavBar from "../components/Navbar";
+import Title from "../components/Title";
 
-export default function About(){
-    return <NavBar></NavBar>
+export default function Potato(){
+    return (
+        <div>
+            <Title title="About"/>
+            <h1>about</h1>
+        </div>
+    )
+    
 }

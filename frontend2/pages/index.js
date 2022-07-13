@@ -1,13 +1,29 @@
-import { useState } from "react";
-import NavBar from "../components/navbar";
+import { useEffect, useState } from "react";
+import Title from "../components/Title";
+
+const API_KEY = "711ff0b4ef9e9ee1377ed51511bd5560";
 
 export default function Home(){
-    const [counter, setCounter] = useState(0);
+    const [moives, setMovies] = useState([]);
+    cosnt 
+    useEffect(() => {
+        (async() => {
+            const {results} = await (
+                await fetch(
+                `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
+            )).json();
+            setMovies(results);
+            console.log(results);
+        })();
+    }, []);
     return (
         <div>
-            <NavBar></NavBar>
-            <h1>hello {counter}</h1>
-            <button onClick={()=>setCounter(prev => prev+1)}></button>
+            <Title title="Home"/>
+            {!movies && <h4>Loading...</h4>}
+            {moives?.map((movie) => 
+                <div key={movie.id}>
+                    <h4>{movie.original_title}</h4>
+                </div>)}
         </div>
     )
 }
